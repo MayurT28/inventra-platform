@@ -1,5 +1,6 @@
 package com.inventra.backend.controller;
 
+import com.inventra.backend.dto.ApiResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -7,7 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class HealthController {
 
     @GetMapping("/api/health")
-    public String healthCheck() {
-        return "Inventra Backend Running Successfully!";
+    public ApiResponse healthCheck() {
+
+        return new ApiResponse(
+                "success",
+                "Inventra Backend Running Successfully!");
     }
 }

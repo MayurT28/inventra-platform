@@ -47,7 +47,15 @@ public class ProductController {
     @PutMapping("/{id}")
     public Product updateProduct(
             @PathVariable Long id,
-            @Valid @RequestBody Product product) {
+            @Valid @RequestBody ProductRequest request) {
+
+        Product product = new Product();
+
+        product.setName(request.getName());
+        product.setCategory(request.getCategory());
+        product.setQuantity(request.getQuantity());
+        product.setPrice(request.getPrice());
+
         return productService.updateProduct(id, product);
     }
 }

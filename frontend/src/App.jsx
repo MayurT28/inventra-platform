@@ -22,7 +22,7 @@ function App() {
 
     API.get("/api/products")
       .then((response) => {
-        setProducts(response.data);
+        setProducts(response.data.data);
       })
       .catch((error) => {
         console.error("Error fetching products:", error);

@@ -5,6 +5,7 @@ import com.inventra.backend.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import com.inventra.backend.dto.ProductRequest;
+import com.inventra.backend.response.ApiResponse;
 
 import java.util.List;
 
@@ -21,13 +22,20 @@ public class ProductController {
 
     // GET all products
     @GetMapping
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
+    public ApiResponse<List<Product>> getAllProducts() {
+
+        List<Product> products = productService.getAllProducts();
+
+        return new ApiResponse<>(
+                true,
+                "Products fetched successfully",
+                products);
     }
 
     // POST new product
     @PostMapping
-    public Product addProduct(@Valid @RequestBody ProductRequest request) {
+    public ApiResponse<Product> addProduct(
+            @Valid @RequestBody ProductRequest request) {
 
         Product product = new Product();
 
@@ -36,16 +44,27 @@ public class ProductController {
         product.setQuantity(request.getQuantity());
         product.setPrice(request.getPrice());
 
-        return productService.addProduct(product);
+        Product savedProduct = productService.addProduct(product);
+
+        return new ApiResponse<>(
+                true,
+                "Product added successfully",
+                savedProduct);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable Long id) {
+    public ApiResponse<String> deleteProduct(@PathVariable Long id) {
+
         productService.deleteProduct(id);
+
+        return new ApiResponse<>(
+                true,
+                "Product deleted successfully",
+                null);
     }
 
     @PutMapping("/{id}")
-    public Product updateProduct(
+    public ApiResponse<Product> updateProduct(
             @PathVariable Long id,
             @Valid @RequestBody ProductRequest request) {
 
@@ -56,6 +75,11 @@ public class ProductController {
         product.setQuantity(request.getQuantity());
         product.setPrice(request.getPrice());
 
-        return productService.updateProduct(id, product);
+        Product updatedProduct = productService.updateProduct(id, product);
+
+        return new ApiResponse<>(
+                true,
+                "Product updated successfully",
+                updatedProduct);
     }
 }

@@ -1,164 +1,38 @@
-import { useEffect, useState } from "react";
-import API from "./services/api";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-import ProductForm from "./components/ProductForm";
-import ProductCard from "./components/ProductCard";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import DashboardPage from "./pages/DashboardPage";
 
 function App() {
 
-  const [products, setProducts] = useState([]);
-
-  const [editId, setEditId] = useState(null);
-
-  const [formData, setFormData] = useState({
-    name: "",
-    category: "",
-    quantity: "",
-    price: ""
-  });
-
-  // Fetch Products
-  const fetchProducts = () => {
-
-    API.get("/api/products")
-      .then((response) => {
-        setProducts(response.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching products:", error);
-      });
-
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  // Handle Form Input
-  const handleChange = (e) => {
-
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-
-  };
-
-  // Edit Product
-  const handleEdit = (product) => {
-
-    setFormData({
-      name: product.name,
-      category: product.category,
-      quantity: product.quantity,
-      price: product.price
-    });
-
-    setEditId(product.id);
-
-  };
-
-  // Delete Product
-  const handleDelete = (id) => {
-
-    API.delete(`/api/products/${id}`)
-      .then(() => {
-        fetchProducts();
-      })
-      .catch((error) => {
-        console.error("Error deleting product:", error);
-      });
-
-  };
-
-  // Submit Product
-  const handleSubmit = (e) => {
-
-    e.preventDefault();
-
-    // UPDATE PRODUCT
-    if (editId) {
-
-      API.put(`/api/products/${editId}`, formData)
-        .then(() => {
-
-          fetchProducts();
-
-          setFormData({
-            name: "",
-            category: "",
-            quantity: "",
-            price: ""
-          });
-
-          setEditId(null);
-
-        })
-        .catch((error) => {
-          console.error("Error updating product:", error);
-        });
-
-    }
-
-    // ADD PRODUCT
-    else {
-
-      API.post("/api/products", formData)
-        .then(() => {
-
-          fetchProducts();
-
-          setFormData({
-            name: "",
-            category: "",
-            quantity: "",
-            price: ""
-          });
-
-        })
-        .catch((error) => {
-          console.error("Error adding product:", error);
-        });
-
-    }
-
-  };
-
   return (
 
-    <div className="min-h-screen bg-gray-100 p-8">
+    <Routes>
 
-      <div className="max-w-5xl mx-auto">
+      <Route
+        path="/login"
+        element={<LoginPage />}
+      />
 
-        <h1 className="text-4xl font-bold mb-8 text-center text-blue-700">
-          Inventra Inventory Dashboard
-        </h1>
+      <Route
+        path="/register"
+        element={<RegisterPage />}
+      />
 
-        <ProductForm
-          formData={formData}
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
-          editId={editId}
-        />
+      <Route
+        path="/dashboard"
+        element={<DashboardPage />}
+      />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Default Redirect */}
+      <Route
+        path="*"
+        element={<Navigate to="/login" />}
+      />
 
-          {products.map((product) => (
+    </Routes>
 
-            <ProductCard
-              key={product.id}
-              product={product}
-              handleDelete={handleDelete}
-              handleEdit={handleEdit}
-            />
-
-          ))}
-
-        </div>
-
-      </div>
-
-    </div>
   );
 }
 

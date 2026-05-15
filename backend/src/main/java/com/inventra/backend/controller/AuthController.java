@@ -15,44 +15,47 @@ import com.inventra.backend.service.JwtService;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final AuthService authService;
-    private final JwtService jwtService;
+        private final AuthService authService;
+        private final JwtService jwtService;
 
-    public AuthController(
-            AuthService authService,
-            JwtService jwtService) {
-        this.authService = authService;
-        this.jwtService = jwtService;
-    }
+        public AuthController(
+                        AuthService authService,
+                        JwtService jwtService) {
+                this.authService = authService;
+                this.jwtService = jwtService;
+        }
 
-    // REGISTER
-    @PostMapping("/register")
-    public ApiResponse<User> register(
-            @Valid @RequestBody RegisterRequest request) {
+        // REGISTER
+        @PostMapping("/register")
+        public ApiResponse<User> register(
+                        @Valid @RequestBody RegisterRequest request) {
 
-        User user = authService.register(request);
+                User user = authService.register(request);
 
-        return new ApiResponse<>(
-                true,
-                "User registered successfully",
-                user);
-    }
+                return new ApiResponse<>(
+                                true,
+                                "User registered successfully",
+                                user);
+        }
 
-    // LOGIN
-    @PostMapping("/login")
-    public ApiResponse<AuthResponse> login(
-            @Valid @RequestBody LoginRequest request) {
+        // LOGIN
+        @PostMapping("/login")
+        public ApiResponse<AuthResponse> login(
+                        @Valid @RequestBody LoginRequest request) {
 
-        User user = authService.login(request);
+                User user = authService.login(request);
 
-        String token = jwtService.generateToken(
-                user.getEmail());
+                String token = jwtService.generateToken(
+                                user.getEmail());
 
-        AuthResponse response = new AuthResponse(token);
+                AuthResponse response = new AuthResponse(
+                                token,
+                                user.getRole(),
+                                user.getUsername());
 
-        return new ApiResponse<>(
-                true,
-                "Login successful",
-                response);
-    }
+                return new ApiResponse<>(
+                                true,
+                                "Login successful",
+                                response);
+        }
 }

@@ -6,8 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import com.inventra.backend.dto.ProductRequest;
 import com.inventra.backend.response.ApiResponse;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import java.util.List;
+import com.inventra.backend.dto.StockAdjustmentRequest;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -22,17 +23,16 @@ public class ProductController {
 
     // GET all products
     @GetMapping
-    public ApiResponse<List<Product>> getAllProducts() {
-
-        List<Product> products = productService.getAllProducts();
+    public ApiResponse<List<Product>> getProducts() {
 
         return new ApiResponse<>(
                 true,
                 "Products fetched successfully",
-                products);
+                productService.getAllProducts());
     }
 
     // POST new product
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     @PostMapping
     public ApiResponse<Product> addProduct(
             @Valid @RequestBody ProductRequest request) {
@@ -52,6 +52,7 @@ public class ProductController {
                 savedProduct);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ApiResponse<String> deleteProduct(@PathVariable Long id) {
 
@@ -63,6 +64,7 @@ public class ProductController {
                 null);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     @PutMapping("/{id}")
     public ApiResponse<Product> updateProduct(
             @PathVariable Long id,
@@ -81,5 +83,12 @@ public class ProductController {
                 true,
                 "Product updated successfully",
                 updatedProduct);
+    }
+
+    @PutMapping("/{id}/adjust-stock")
+    public Product adjustStock(
+            @PathVariable Long id,
+            @RequestBody StockAdjustmentRequest request) {
+        return productService.adjustStock(id, request);
     }
 }

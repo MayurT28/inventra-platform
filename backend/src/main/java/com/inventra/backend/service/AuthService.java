@@ -1,5 +1,6 @@
 package com.inventra.backend.service;
 
+import com.inventra.backend.entity.Role;
 import com.inventra.backend.dto.LoginRequest;
 import com.inventra.backend.dto.RegisterRequest;
 import com.inventra.backend.entity.User;
@@ -41,7 +42,11 @@ public class AuthService {
                 passwordEncoder.encode(request.getPassword()));
 
         // Default role
-        user.setRole("USER");
+        user.setRole(
+        request.getRole() != null
+                ? request.getRole()
+                : Role.STAFF
+        );
 
         return userRepository.save(user);
     }

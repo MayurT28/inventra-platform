@@ -3,6 +3,7 @@ package com.inventra.backend.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import com.inventra.backend.entity.Role;
 
 public class RegisterRequest {
 
@@ -15,8 +16,17 @@ public class RegisterRequest {
 
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
+    private Role role;
 
     public RegisterRequest() {
+    }
+
+    public Role getRole() {
+    return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public String getUsername() {

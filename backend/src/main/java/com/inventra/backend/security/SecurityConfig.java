@@ -73,6 +73,9 @@ public class SecurityConfig {
                 configuration.addAllowedOrigin(
                                 "http://localhost:5173");
 
+                configuration.addAllowedOrigin(
+                                "https://inventra-platform-1.onrender.com");
+
                 configuration.addAllowedMethod("*");
 
                 configuration.addAllowedHeader("*");

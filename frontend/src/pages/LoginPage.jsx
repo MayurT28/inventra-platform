@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import API from "../services/api";
 
 function LoginPage() {
@@ -85,6 +86,15 @@ function LoginPage() {
           </button>
         </div>
       </form>
+      <p className="text-center mt-4 text-sm">
+        Need an account?{" "}
+        <Link
+          to="/register"
+          className="text-blue-600 font-medium hover:underline"
+        >
+          Register
+        </Link>
+      </p>
     </div>
   );
 }

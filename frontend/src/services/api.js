@@ -1,22 +1,19 @@
 import axios from "axios";
 
 const API = axios.create({
-    // baseURL: "http://localhost:8080"
-    baseURL: "https://inventra-platform.onrender.com"
-
+  // baseURL: "http://localhost:8080"
+  baseURL: "https://inventra-platform-frontend.onrender.com",
 });
 
 // Attach JWT token automatically
 API.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
 
-    const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
 
-    if (token) {
-        config.headers.Authorization =
-            `Bearer ${token}`;
-    }
-
-    return config;
+  return config;
 });
 
 export default API;

@@ -68,26 +68,25 @@ public class SecurityConfig {
         @Bean
         public CorsConfigurationSource corsConfigurationSource() {
 
-                CorsConfiguration configuration = new CorsConfiguration();
+        CorsConfiguration configuration = new CorsConfiguration();
 
-                configuration.addAllowedOrigin(
-                                "http://localhost:5173");
+        configuration.addAllowedOrigin("http://localhost:5173");
 
-                configuration.addAllowedOrigin(
-                                "https://inventra-platform-1.onrender.com");
+        configuration.addAllowedOrigin("https://inventra-platform-1.onrender.com");
 
-                configuration.addAllowedMethod("*");
+        configuration.addAllowedMethod("*");
 
-                configuration.addAllowedHeader("*");
+        configuration.addAllowedHeader("*");
 
-                configuration.setAllowCredentials(true);
+        configuration.setAllowCredentials(true);
 
-                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
 
-                source.registerCorsConfiguration(
-                                "/**",
-                                configuration);
+        source.registerCorsConfiguration(
+                "/**",
+                configuration);
 
-                return source;
+        return source;
         }
 }
